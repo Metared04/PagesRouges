@@ -8,6 +8,8 @@
     <SolidColorBrush x:Key="color3" Color="#494B4A"/>
     <SolidColorBrush x:Key="color4" Color="#EBEBE9"/>
     <SolidColorBrush x:Key="color5" Color="#E83609"/>
+    <SolidColorBrush x:Key="color6" Color="#990A00"/>
+    <SolidColorBrush x:Key="gradientColor1" Color="#C2241D"/>
 
     <!-- Nuances bleu -->
 
@@ -19,6 +21,7 @@
     <SolidColorBrush x:Key="whiteColor" Color="White"/>
     <SolidColorBrush x:Key="errorMessage" Color="Red"/>
     <SolidColorBrush x:Key="textBlockColor" Color="#F7BA0A"/>
+    <SolidColorBrush x:Key="blackColor" Color="#000000"/>
 
     <!-- Couleurs cartes -->
 
