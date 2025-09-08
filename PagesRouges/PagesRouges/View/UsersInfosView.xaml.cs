@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace PagesRouges.CustomControls
+namespace PagesRouges.View
 {
     /// <summary>
-    /// Logique d'interaction pour BindablePasswordBox.xaml
+    /// Logique d'interaction pour UsersInfosView.xaml
     /// </summary>
-    public partial class BindablePasswordBox : UserControl
+    public partial class UsersInfosView : UserControl
     {
-        public BindablePasswordBox()
+        public UsersInfosView()
         {
             InitializeComponent();
         }
