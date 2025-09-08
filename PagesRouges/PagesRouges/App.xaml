@@ -1,0 +1,9 @@
+﻿<Application x:Class="PagesRouges.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:PagesRouges"
+             StartupUri="View/UserLoginView.xaml">
+    <Application.Resources>
+         
+    </Application.Resources>
+</Application>

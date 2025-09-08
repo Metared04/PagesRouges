@@ -1,0 +1,30 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Palette Couleurs -->
+
+    <SolidColorBrush x:Key="color1" Color="#DA0506"/>
+    <SolidColorBrush x:Key="color2" Color="#1D375C"/>
+    <SolidColorBrush x:Key="color3" Color="#494B4A"/>
+    <SolidColorBrush x:Key="color4" Color="#EBEBE9"/>
+    <SolidColorBrush x:Key="color5" Color="#E83609"/>
+
+    <!-- Nuances bleu -->
+
+    <SolidColorBrush x:Key="nuanceBleuClair" Color="#3A4A5C"/>
+    <SolidColorBrush x:Key="nuanceBleuFonce" Color="#0F1A26"/>
+
+    <!-- Couleurs polices -->
+
+    <SolidColorBrush x:Key="whiteColor" Color="White"/>
+    <SolidColorBrush x:Key="errorMessage" Color="Red"/>
+    <SolidColorBrush x:Key="textBlockColor" Color="#F7BA0A"/>
+
+    <!-- Couleurs cartes -->
+
+    <SolidColorBrush x:Key="redCardColor" Color="#DA0506"/>
+    <SolidColorBrush x:Key="darkBlueCardColor" Color="#1D375C"/>
+    <SolidColorBrush x:Key="whiteCardColor" Color="#EBEBE9"/>
+    <SolidColorBrush x:Key="yellowCardColor" Color="#F4FA41"/>
+
+</ResourceDictionary>
