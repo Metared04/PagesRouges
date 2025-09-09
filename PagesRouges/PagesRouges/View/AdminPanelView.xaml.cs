@@ -1,5 +1,8 @@
-﻿using PagesRouges.ViewModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -10,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace PagesRouges
+namespace PagesRouges.View
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Logique d'interaction pour AdminPanelView.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class AdminPanelView : UserControl
     {
-        public MainWindow()
+        public AdminPanelView()
         {
             InitializeComponent();
         }

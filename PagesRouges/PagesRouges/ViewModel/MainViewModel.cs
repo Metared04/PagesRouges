@@ -3,9 +3,11 @@ using PagesRouges.View;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace PagesRouges.ViewModel
@@ -14,9 +16,9 @@ namespace PagesRouges.ViewModel
     {
         // Champs
         private ViewModelBase _currentChildView;
-        private bool _isAdminPanelVisible;
-        private bool _isLoginVisible;
-        
+        private Visibility _isLoginVisible = Visibility.Collapsed;
+        private string _storedPassword = "mdp";
+
 
         // Proprietes
         public ViewModelBase CurrentChildView
@@ -32,19 +34,7 @@ namespace PagesRouges.ViewModel
                 OnPropertyChanged(nameof(CurrentChildView));
             }
         }
-        public bool IsAdminPanelVisible
-        {
-            get
-            {
-                return _isAdminPanelVisible;
-            }
-            set
-            {
-                _isAdminPanelVisible = value;
-                OnPropertyChanged(nameof(IsAdminPanelVisible));
-            }
-        }
-        public bool IsLoginVisible
+        public Visibility IsLoginVisible
         {
             get
             {
@@ -56,18 +46,19 @@ namespace PagesRouges.ViewModel
                 OnPropertyChanged(nameof(IsLoginVisible));
             }
         }
-        
+
         // Commandes
         public ICommand ShowUsersListCommand { get; }
-        public ICommand ValidatePasswordCommand { get; }
+        public ICommand OpenLoginCommand { get; }
+        public ICommand CheckPasswordCommand { get; }
 
         // Constructeur
         public MainViewModel()
         {
             // Initialisation des commandes
             ShowUsersListCommand = new ViewModelCommand(ExecuteShowUsersListCommand);
-            
-            //ValidatePasswordCommand = new ViewModelCommand(ExecuteValidatePasswordCommand);
+            OpenLoginCommand = new ViewModelCommand(ExecuteOpenLoginCommand);
+            CheckPasswordCommand = new ViewModelCommand(ExecuteCheckPasswordCommand);
 
             ExecuteShowUsersListCommand(null);
         }
@@ -75,15 +66,20 @@ namespace PagesRouges.ViewModel
         {
             CurrentChildView = new UsersInfosViewModel();
         }
-        
-        private void ExecuteValidatePassword(object obj)
+        private void ExecuteOpenLoginCommand(object obj)
         {
-            string password = obj as string;
+            IsLoginVisible = Visibility.Visible; 
+        }
+        private void ExecuteCheckPasswordCommand(object obj)
+        {
+            var passwordBox = obj as PasswordBox;
+            string inputPassword = passwordBox?.Password ?? string.Empty;
+            MessageBox.Show($"Mdp = {inputPassword}");
 
-            if (password == "MonMotDePasseSecret")
+            if (inputPassword == _storedPassword)
             {
-                IsLoginVisible = false;
-                IsAdminPanelVisible = true;
+                IsLoginVisible = Visibility.Collapsed;
+                CurrentChildView = new AdminPanelViewModel();
             }
             else
             {
