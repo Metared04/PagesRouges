@@ -14,9 +14,9 @@ namespace PagesRouges.Model
         public string FixNumber { get; set; }
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
-        public int Service { get; set; }
+        public string Service { get; set; }
         public Service IdService { get; set; }
-        public int Site { get; set; }
+        public string Site { get; set; }
         public Site IdSite { get; set; }
     }
 }

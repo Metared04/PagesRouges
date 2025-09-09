@@ -79,14 +79,14 @@
                                     Binding="{Binding PhoneNumber}" 
                                     Width="100"/>
                     <DataGridTextColumn Header="Email"
-                                    Binding="{Binding Email}" 
-                                    Width="190"/>
+                                        Binding="{Binding Email}" 
+                                        Width="190"/>
                     <DataGridTextColumn Header="Service"
-                                    Binding="{Binding Service}"
-                                    Width="75"/>
+                                        Binding="{Binding Service}"
+                                        Width="75"/>
                     <DataGridTextColumn Header="Site"
-                                    Binding="{Binding Site}"
-                                    Width="75"/>
+                                        Binding="{Binding Site}"
+                                        Width="75"/>
                     <DataGridTemplateColumn Header="Option" 
                                         Width="65">
                         <DataGridTemplateColumn.CellTemplate>

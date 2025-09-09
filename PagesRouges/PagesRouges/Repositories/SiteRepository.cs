@@ -12,6 +12,33 @@ namespace PagesRouges.Repositories
 {
     public class SiteRepository : RepositoryBase, ISiteRepository
     {
+        public IEnumerable<Site> GetAll()
+        {
+            List<Site> siteList = new List<Site>();
+
+            using (var connection = GetConnection())
+            using (var command = new SqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = "Select * from SiteTable";
+
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var site = new Site()
+                        {
+                            SiteId = reader.GetInt32(0),
+                            SiteName = reader.GetString(1),
+                        };
+                        siteList.Add(site);
+                    }
+                }
+            }
+            return siteList;
+        }
+
         public Site GetById(int id)
         {
             using (var connection = GetConnection())

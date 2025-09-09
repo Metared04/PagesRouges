@@ -23,6 +23,9 @@ namespace PagesRouges.ViewModel
         private IServiceRepository serviceRepository;
 
         private ViewModelBase _userView;
+
+        private List<Service> _servicesList;
+        private List<Site> _sitesList;
         
         public ObservableCollection<User> CurrentUserList
         {
@@ -48,7 +51,30 @@ namespace PagesRouges.ViewModel
                 OnPropertyChanged(nameof(UserView));
             }
         }
-
+        public List<Service> ServicesList
+        {
+            get
+            {
+                return _servicesList;
+            }
+            set
+            {
+                _servicesList = value;
+                OnPropertyChanged(nameof(ServicesList));
+            }
+        }
+        public List<Site> SitesList
+        {
+            get
+            {
+                return _sitesList;
+            }
+            set
+            {
+                _sitesList = value;
+                OnPropertyChanged(nameof(SitesList));
+            }
+        }
         // Commandes
         public ICommand ShowUserInfosCommand { get; }
 
@@ -68,15 +94,22 @@ namespace PagesRouges.ViewModel
         private void LoadData()
         {
             var userList = new List<User>();
-            userList = userRepository.GetAll().ToList();
+            userList = userRepository.GetAll().ToList();            
+            
+            CurrentUserList = new ObservableCollection<User>(userList);
             /*
+            var serviceList = new List<Service>();
+            var siteList = new List<Site>();
+            serviceList = serviceRepository.GetAll().ToList();
+            siteList = siteRepository.GetAll().ToList();
+
+            
             foreach (var user in userList)
             {
-                user.IdService = serviceRepository.GetById(user.Service);
-                user.IdSite = siteRepository.GetById(user.Site);
-            }
-            */
-            CurrentUserList = new ObservableCollection<User>(userList);
+                user.Service = serviceList.
+                user.Site = siteRepository.GetById();
+            }*/
+            
         }
         private void ExecuteShowUserInfosCommand(object obj)
         {

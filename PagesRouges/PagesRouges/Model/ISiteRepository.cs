@@ -9,5 +9,6 @@ namespace PagesRouges.Model
     public interface ISiteRepository
     {
         Site GetById(int id);
+        IEnumerable<Site> GetAll();
     }
 }

@@ -32,7 +32,11 @@ namespace PagesRouges.Repositories
             {
                 connection.Open();
                 command.Connection = connection;
-                command.CommandText = "select * from [UserTable]";
+                command.CommandText = "select u.IdUser, u.NameUser, u.FirstNameUser," +
+                    "u.FixNumberUser, u.PhoneNumberUser, u.Email, " +
+                    "s.ServiceName, si.SiteName from [UserTable] u " +
+                    "INNER JOIN [ServiceTable] s ON u.UserIdService = s.ServiceId " +
+                    "INNER JOIN [SiteTable] si ON u.UserIdSite = si.SiteId";
                 using (var reader = command.ExecuteReader())
                 {
                     while (reader.Read())
@@ -45,8 +49,8 @@ namespace PagesRouges.Repositories
                             FixNumber = reader["FixNumberUser"].ToString(),
                             PhoneNumber = reader["PhoneNumberUser"].ToString(),
                             Email = reader["Email"].ToString(),
-                            Service = (int)reader["UserIdService"],
-                            Site = (int)reader["UserIdSite"]
+                            Service = reader["ServiceName"].ToString(),
+                            Site = reader["SiteName"].ToString()
                         };
                         usersList.Add(user);
                     }

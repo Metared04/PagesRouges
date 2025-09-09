@@ -52,8 +52,8 @@ namespace PagesRouges.ViewModel
         public string FixNumber => User?.FixNumber ?? string.Empty;
         public string PhoneNumber => User?.PhoneNumber ?? string.Empty;
         public string Email => User?.Email ?? string.Empty;
-        public int Service => User?.Service ?? 0;
-        public int Site => User?.Site ?? 0;
+        public string Service => User?.Service ?? string.Empty;
+        public string Site => User?.Site ?? string.Empty;
 
         public User CurrentUser
         {

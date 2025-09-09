@@ -11,6 +11,33 @@ namespace PagesRouges.Repositories
 {
     public class ServiceRepository : RepositoryBase, IServiceRepository
     {
+        public IEnumerable<Service> GetAll()
+        {
+            List<Service> serviceList = new List<Service>();
+
+            using (var connection = GetConnection())
+            using (var command = new SqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = "Select * from ServiceTable";
+
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var service = new Service()
+                        {
+                            ServiceId = reader.GetInt32(0),
+                            ServiceName = reader.GetString(1),
+                        };
+                        serviceList.Add(service);
+                    }
+                }
+            }
+            return serviceList;
+        }
+
         public Service GetById(int id)
         {
             using (var connection = GetConnection())

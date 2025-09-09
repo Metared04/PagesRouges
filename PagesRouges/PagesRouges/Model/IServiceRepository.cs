@@ -9,5 +9,6 @@ namespace PagesRouges.Model
     public interface IServiceRepository
     {
         Service GetById(int id);
+        IEnumerable<Service> GetAll();
     }
 }
