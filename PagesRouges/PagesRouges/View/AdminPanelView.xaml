@@ -4,105 +4,77 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PagesRouges.View"
+             xmlns:views="clr-namespace:PagesRouges.View"
+             xmlns:viewModel="clr-namespace:PagesRouges.ViewModel"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+
+        <DataTemplate DataType="{x:Type viewModel:UserListViewModel}">
+            <views:UserListView/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type viewModel:ServicesListViewModel}">
+            <views:ServicesListView/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type viewModel:SitesListViewModel}">
+            <views:SitesListView/>
+        </DataTemplate>
+
+    </UserControl.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
-            <RowDefinition Height="25"/>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="75"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-            <TextBox Text="[Mode admin]"/>
 
-        <StackPanel Orientation="Horizontal"
-            VerticalAlignment="Top"
-            Grid.Row="2">
+        <StackPanel Grid.Row="0">
+            <TextBox Text="[Mode admin]"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1"
+                    Grid.ColumnSpan="2"
+                    Orientation="Horizontal"
+                    Background="{StaticResource color2}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
+
+                <RadioButton Style="{StaticResource menuButton}" 
+                             Tag="{StaticResource whiteColor}"
+                             Command="{Binding ShowUsersListCommand}"
+                             IsChecked="True"
+                             Grid.Column="0">
+                    <TextBlock Text="Utilisateurs" 
+                               Style="{StaticResource menuButtonText}"/>
+                </RadioButton>
+                <RadioButton Style="{StaticResource menuButton}" 
+                             Tag="{StaticResource whiteColor}"
+                             Command="{Binding ShowServicesListCommand}"
+                             Grid.Column="1">
+                    <TextBlock Text="Services" 
+                               Style="{StaticResource menuButtonText}"/>
+                </RadioButton>
+                <RadioButton Style="{StaticResource menuButton}" 
+                             Tag="{StaticResource whiteColor}"
+                             Command="{Binding ShowSitesListCommand}"
+                             Grid.Column="2">
+                    <TextBlock Text="Sites" 
+                               Style="{StaticResource menuButtonText}"/>
+                </RadioButton>                
             </Grid>
-            <TextBox Text="Rechercher ..."
-                     Width="300"
-                     Height="30"
-                     Grid.Column="0"/>
-            <Button Name="searchNameButton"
-                    Content="Chercher"
-                    Margin="5,0,0,0"
-                    Grid.Column="1"/>
-            <TextBox Text="Rechercher ..."
-                     Width="300"
-                     Height="30"
-                     Grid.Column="2"/>
-            <Button Name="searchSiteButton"
-                    Content="Chercher"
-                    Margin="5,0,0,0"
-                    Grid.Column="3"/>
-            <TextBox Text="Rechercher ..."
-                     Width="300"
-                     Height="30"
-                     Grid.Column="4"/>
-            <Button Name="searchServiceButton"
-                    Content="Chercher"
-                    Margin="5,0,0,0"
-                    Grid.Column="5"/>
         </StackPanel>
 
-        <DataGrid ItemsSource="{Binding CurrentUserList}" 
-                  AutoGenerateColumns="False" 
-                  HeadersVisibility="Column" 
-                  CanUserAddRows="False" 
-                  GridLinesVisibility="Horizontal" 
-                  Grid.Row="3"
-                  FontFamily="Palatino Linotype"
-                  VerticalAlignment="Stretch"
-                  HorizontalAlignment="Stretch">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" 
-                                    Binding="{Binding Id}" 
-                                    Width="*"/>
-                <DataGridTextColumn Header="Nom" 
-                                    Binding="{Binding Name}" 
-                                    Width="110"/>
-                <DataGridTextColumn Header="Prenom" 
-                                    Binding="{Binding FirstName}" 
-                                    Width="90"/>
-                <DataGridTextColumn Header="Fixe" 
-                                    Binding="{Binding FixNumber}" 
-                                    Width="100"/>
-                <DataGridTextColumn Header="Portable" 
-                                    Binding="{Binding PhoneNumber}" 
-                                    Width="100"/>
-                <DataGridTextColumn Header="Email"
-                                    Binding="{Binding Email}" 
-                                    Width="190"/>
-                <DataGridTextColumn Header="Service"
-                                    Binding="{Binding Service}"
-                                    Width="75"/>
-                <DataGridTextColumn Header="Site"
-                                    Binding="{Binding Site}"
-                                    Width="75"/>
-                <DataGridTemplateColumn Header="Option" 
-                                        Width="65">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <Button Content="Voir" 
-                                        Command="{Binding DataContext.ShowUserInfosCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                        CommandParameter="{Binding}" 
-                                        Width="60"/>
-                            </StackPanel>
-
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
+        <ContentControl Content="{Binding CurrentChildChildView}"
+                        Margin="25"
+                        Grid.Row="2"/>
     </Grid>
 </UserControl>

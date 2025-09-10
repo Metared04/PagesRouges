@@ -1,0 +1,46 @@
+﻿<Window x:Class="PagesRouges.View.AddSiteView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PagesRouges.View"
+        mc:Ignorable="d"
+        Title="Ajouter un site" Height="300" Width="500">
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Nom du site :"
+                   Foreground="{StaticResource textBlockColor}"
+                   Grid.Row="1"/>
+        <TextBox Margin="45,5,45,5"
+                 Grid.Row="2"
+                 Text="{Binding NewSiteName, UpdateSourceTrigger=PropertyChanged}"/>
+        <Border CornerRadius="12"
+                Background="{StaticResource whiteCardColor}"
+                Margin="100, 20, 100, 20"
+                Grid.Row="3">
+            <Grid Margin="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Content="Valider" 
+                        Command="{Binding CreateNewSiteCommand}" 
+                        Margin="20, 5, 20, 5"
+                        Background="LightGreen"
+                        Grid.Column="0"/>
+                <Button Content="Fermer" 
+                        Command="{Binding CloseWindowCommand}" 
+                        Margin="20, 5, 20, 5"
+                        Background="Red"
+                        Grid.Column="1"/>
+            </Grid>
+        </Border>
+        
+    </Grid>
+</Window>

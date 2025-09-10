@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -15,78 +16,61 @@ namespace PagesRouges.ViewModel
     public class AdminPanelViewModel : ViewModelBase
     {
         // Champs
-        private ObservableCollection<User> _currentUserList;
+        private ViewModelBase _currentChildChildView;
 
-        private IUserRepository userRepository;
+        
         private ISiteRepository siteRepository;
         private IServiceRepository serviceRepository;
-
-        private ViewModelBase _userView;
-
-        public ObservableCollection<User> CurrentUserList
+        
+        public ViewModelBase CurrentChildChildView
         {
             get
             {
-                return _currentUserList;
+                return _currentChildChildView;
             }
             set
             {
-                _currentUserList = value;
-                OnPropertyChanged(nameof(CurrentUserList));
+                _currentChildChildView = value;
+                OnPropertyChanged(nameof(CurrentChildChildView));
             }
         }
-        public ViewModelBase UserView
-        {
-            get
-            {
-                return _userView;
-            }
-            set
-            {
-                _userView = value;
-                OnPropertyChanged(nameof(UserView));
-            }
-        }
+        
 
         // Commandes
-        public ICommand ShowUserInfosCommand { get; }
+        public ICommand ShowUsersListCommand { get; }
+        public ICommand ShowServicesListCommand { get; }
+        public ICommand ShowSitesListCommand { get; }
+        
 
         // Constructeur
         public AdminPanelViewModel()
         {
-            userRepository = new UserRepository();
+            
             siteRepository = new SiteRepository();
             serviceRepository = new ServiceRepository();
 
             // Initialisation des commandes
-            ShowUserInfosCommand = new ViewModelCommand(ExecuteShowUserInfosCommand);
+            ShowUsersListCommand = new ViewModelCommand(ExecuteShowUsersListCommand);
+            ShowServicesListCommand = new ViewModelCommand(ExecuteShowServicesListCommand);
+            ShowSitesListCommand = new ViewModelCommand(ExecuteShowSitesListCommand);
 
-            LoadData();
+            //View par default
+            ExecuteShowUsersListCommand(null);
 
         }
-        private void LoadData()
+        
+        private void ExecuteShowUsersListCommand(object obj)
         {
-            var userList = new List<User>();
-            userList = userRepository.GetAll().ToList();
-            /*
-            foreach (var user in userList)
-            {
-                user.IdService = serviceRepository.GetById(user.Service);
-                user.IdSite = siteRepository.GetById(user.Site);
-            }
-            */
-            CurrentUserList = new ObservableCollection<User>(userList);
+            CurrentChildChildView = new UserListViewModel();
         }
-        private void ExecuteShowUserInfosCommand(object obj)
+        private void ExecuteShowServicesListCommand(object obj)
         {
-            var user = obj as User;
-            UserView = new UserDetailsViewModel(user);
-            var window = new UserDetailsView
-            {
-                DataContext = UserView,
-                Owner = Application.Current.MainWindow
-            };
-            window.ShowDialog();
+            CurrentChildChildView = new ServicesListViewModel();
         }
+        private void ExecuteShowSitesListCommand(object obj)
+        {
+            CurrentChildChildView = new SitesListViewModel();
+        }
+        
     }
 }

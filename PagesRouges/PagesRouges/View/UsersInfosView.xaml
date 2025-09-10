@@ -83,10 +83,10 @@
                                         Width="190"/>
                     <DataGridTextColumn Header="Service"
                                         Binding="{Binding Service}"
-                                        Width="75"/>
+                                        Width="200"/>
                     <DataGridTextColumn Header="Site"
                                         Binding="{Binding Site}"
-                                        Width="75"/>
+                                        Width="80"/>
                     <DataGridTemplateColumn Header="Option" 
                                         Width="65">
                         <DataGridTemplateColumn.CellTemplate>

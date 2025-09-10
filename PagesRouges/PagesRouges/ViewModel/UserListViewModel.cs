@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -13,20 +12,15 @@ using System.Windows.Input;
 
 namespace PagesRouges.ViewModel
 {
-    public class UsersInfosViewModel : ViewModelBase
+    public class UserListViewModel : ViewModelBase
     {
-        // Champs
         private ObservableCollection<User> _currentUserList;
 
+
         private IUserRepository userRepository;
-        private ISiteRepository siteRepository;
-        private IServiceRepository serviceRepository;
 
         private ViewModelBase _userView;
 
-        private List<Service> _servicesList;
-        private List<Site> _sitesList;
-        
         public ObservableCollection<User> CurrentUserList
         {
             get
@@ -51,54 +45,28 @@ namespace PagesRouges.ViewModel
                 OnPropertyChanged(nameof(UserView));
             }
         }
-        public List<Service> ServicesList
-        {
-            get
-            {
-                return _servicesList;
-            }
-            set
-            {
-                _servicesList = value;
-                OnPropertyChanged(nameof(ServicesList));
-            }
-        }
-        public List<Site> SitesList
-        {
-            get
-            {
-                return _sitesList;
-            }
-            set
-            {
-                _sitesList = value;
-                OnPropertyChanged(nameof(SitesList));
-            }
-        }
-        // Commandes
+
         public ICommand ShowUserInfosCommand { get; }
         public ICommand DeleteUserCommand { get; }
-        public ICommand UpdateUserCommand { get; }
+        public ICommand UpdateUserInfosCommand { get; }
+        public ICommand SearchNameCommand { get; }
 
-        // Constructeur
-        public UsersInfosViewModel()
+        public UserListViewModel()
         {
             userRepository = new UserRepository();
-            siteRepository = new SiteRepository();
-            serviceRepository = new ServiceRepository();
 
-            // Initialisation des commandes
             ShowUserInfosCommand = new ViewModelCommand(ExecuteShowUserInfosCommand);
+            DeleteUserCommand = new ViewModelCommand(ExecuteDeleteUserCommand);
+            UpdateUserInfosCommand = new ViewModelCommand(ExecuteUpdateUserInfosCommand);
+            SearchNameCommand = new ViewModelCommand(ExecuteSearchNameCommand);
 
             LoadData();
-
         }
         private void LoadData()
         {
             var userList = new List<User>();
-            userList = userRepository.GetAll().ToList();            
-            
-            CurrentUserList = new ObservableCollection<User>(userList);                        
+            userList = userRepository.GetAll().ToList();
+            CurrentUserList = new ObservableCollection<User>(userList);
         }
         private void ExecuteShowUserInfosCommand(object obj)
         {
@@ -110,6 +78,31 @@ namespace PagesRouges.ViewModel
                 Owner = Application.Current.MainWindow
             };
             window.ShowDialog();
+        }
+        private void ExecuteDeleteUserCommand(object obj)
+        {
+            var user = obj as User;
+            if (user == null) return;
+            var result = MessageBox.Show($"Supprimer l'utilisateur \"{user.Name}\" ?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (result != MessageBoxResult.Yes) return;
+            try
+            {
+                userRepository.Remove(user);
+                CurrentUserList.Remove(user);
+                MessageBox.Show("Utilisateur supprimé avec succès.", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur lors de la suppression : {ex}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        private void ExecuteUpdateUserInfosCommand(object obj)
+        {
+
+        }
+        private void ExecuteSearchNameCommand(object obj)
+        {
+
         }
     }
 }

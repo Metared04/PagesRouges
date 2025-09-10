@@ -8,6 +8,8 @@ namespace PagesRouges.Model
 {
     public interface IServiceRepository
     {
+        void Add(Service service);
+        void Remove(int id);
         Service GetById(int id);
         IEnumerable<Service> GetAll();
     }

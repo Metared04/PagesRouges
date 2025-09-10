@@ -11,6 +11,32 @@ namespace PagesRouges.Repositories
 {
     public class ServiceRepository : RepositoryBase, IServiceRepository
     {
+        public void Add(Service service)
+        {
+            using (var connection = GetConnection())
+            using (var command = new SqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = @"Insert into [ServiceTable] " +
+                    "(NameService) values (@name)";
+                command.Parameters.AddWithValue("@name", service.ServiceName);
+
+                command.ExecuteNonQuery();
+            }
+        }
+        public void Remove(int id)
+        {
+            using (var connection = GetConnection())
+            using (var command = new SqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = "Delete from [ServiceTable] Where IdService = @id";
+                command.Parameters.Add("@id", SqlDbType.Int).Value = id;
+                int rowsAffected = command.ExecuteNonQuery();
+            }
+        }
         public IEnumerable<Service> GetAll()
         {
             List<Service> serviceList = new List<Service>();
@@ -20,7 +46,7 @@ namespace PagesRouges.Repositories
             {
                 connection.Open();
                 command.Connection = connection;
-                command.CommandText = "Select * from ServiceTable";
+                command.CommandText = "Select * from ServiceTable order by IdService";
 
                 using (var reader = command.ExecuteReader())
                 {

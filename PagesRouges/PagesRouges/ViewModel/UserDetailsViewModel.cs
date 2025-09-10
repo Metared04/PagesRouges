@@ -103,7 +103,7 @@ namespace PagesRouges.ViewModel
                 {
                     Filter = "PDF files (*.pdf)|*.pdf",
                     Title = "Enregistrer le ticket en PDF",
-                    FileName = $"Ticket_{User.Id}.pdf"
+                    FileName = $"User_{User.Id}.pdf"
                 };
                 if (saveFileDialog.ShowDialog() != true) return;
                 QuestPDF.Settings.License = LicenseType.Community;
@@ -119,7 +119,7 @@ namespace PagesRouges.ViewModel
                             .PaddingVertical(1, Unit.Centimetre)
                             .Column(x =>
                             {
-                                x.Item().Text("TEST PDF").FontSize(20).Bold();
+                                x.Item().Text("Pages Rouges").FontSize(20).Bold();
                                 x.Item().Text($"ID: {User?.Id}").FontSize(12);
                                 x.Item().Text($"Nom: {User?.Name}").FontSize(12);
                                 x.Item().Text($"Prenom: {User?.FirstName}").FontSize(12);

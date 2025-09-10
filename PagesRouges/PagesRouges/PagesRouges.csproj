@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <Folder Include="CustomControls\" />
+    <Folder Include="PDFs\" />
   </ItemGroup>
 
   <ItemGroup>

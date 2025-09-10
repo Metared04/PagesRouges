@@ -12,6 +12,32 @@ namespace PagesRouges.Repositories
 {
     public class SiteRepository : RepositoryBase, ISiteRepository
     {
+        public void Add(Site site)
+        {
+            using (var connection = GetConnection())
+            using (var command = new SqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = @"Insert into [SiteTable] " +
+                    "(NameSite) values (@name)";
+                command.Parameters.AddWithValue("@name", site.SiteName);
+
+                command.ExecuteNonQuery();
+            }
+        }
+        public void Remove(int id)
+        {
+            using (var connection = GetConnection())
+            using (var command = new SqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = "Delete from [SiteTable] Where IdSite = @id";
+                command.Parameters.Add("@id", SqlDbType.Int).Value = id;
+                int rowsAffected = command.ExecuteNonQuery();
+            }
+        }
         public IEnumerable<Site> GetAll()
         {
             List<Site> siteList = new List<Site>();
@@ -21,7 +47,7 @@ namespace PagesRouges.Repositories
             {
                 connection.Open();
                 command.Connection = connection;
-                command.CommandText = "Select * from SiteTable";
+                command.CommandText = "Select * from SiteTable order by IdSite";
 
                 using (var reader = command.ExecuteReader())
                 {
