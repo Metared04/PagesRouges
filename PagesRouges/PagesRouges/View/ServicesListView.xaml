@@ -20,20 +20,28 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <TextBox Text="Rechercher ..."
-                         Width="300"
-                         Height="30"
-                         Grid.Column="0"/>
-                <Button Name="searchNameButton"
-                        Content="Chercher"
-                        Margin="5,0,0,0"
-                        Grid.Column="1"/>
-                <TextBlock Text="Service"
-                           Grid.Column="2"/>
-                <Button Content="+"
-                        Command="{Binding AddServiceCommand}"
-                        Grid.Column="3"
-                        Width="30"/>
+                <StackPanel Grid.Column="0">
+                    <ComboBox ItemsSource="{Binding ServiceIds}" 
+                              SelectedValue="{Binding SelectedNewUserServiceId, Mode=TwoWay}"
+                              SelectedValuePath="ServiceId"
+                              DisplayMemberPath="ServiceName"
+                              Margin="5,0,5,0"
+                              Height="20"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1">
+                    <Button Name="searchNameButton"
+                            Content="Chercher"
+                            Command="{Binding SearchServiceCommand}"
+                            Margin="5,0,0,0"/>
+                </StackPanel>
+                <StackPanel Grid.Column="2">
+                    <Button Content="Rafraichir"
+                            Command="{Binding RefreshServiceListCommand}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="3">
+                    <Button Content="+"
+                            Command="{Binding AddServiceCommand}"/>
+                </StackPanel>
             </Grid>
         </StackPanel>
         

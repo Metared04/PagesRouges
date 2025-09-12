@@ -38,6 +38,20 @@ namespace PagesRouges.Repositories
                 int rowsAffected = command.ExecuteNonQuery();
             }
         }
+        public void Update(int id, string newName)
+        {
+            using (var connection = GetConnection())
+            using (var command = new SqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = "UPDATE [SiteTable] SET NameSite = @name Where IdSite = @id";
+                command.Parameters.Add("@name", SqlDbType.NVarChar).Value = newName;
+                command.Parameters.Add("@id", SqlDbType.Int).Value = id;
+
+                command.ExecuteNonQuery();
+            }
+        }
         public int GetRandomIdSite()
         {
             using (var connection = GetConnection())
@@ -101,6 +115,33 @@ namespace PagesRouges.Repositories
                 }
             }
             return null;
+        }
+        public IEnumerable<Site> GetAllById(int id)
+        {
+            List<Site> sitesList = new List<Site>();
+
+            using (var connection = GetConnection())
+            using (var command = new SqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = "Select * from SiteTable where IdSite = @id";
+                command.Parameters.Add("@id", SqlDbType.Int).Value = id;
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var site = new Site
+                        {
+                            SiteId = (int)reader["IdSite"],
+                            SiteName = reader["NameSite"].ToString()
+                        };
+                        sitesList.Add(site);
+                    }
+                }
+            }
+
+            return sitesList;
         }
     }
 }

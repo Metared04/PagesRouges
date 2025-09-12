@@ -19,7 +19,6 @@ namespace PagesRouges.ViewModel
     {
         // Champs
         private ObservableCollection<User> _currentUserList;
-        private ObservableCollection<User> _usersList;
         private int _selectedNewUserServiceId;
         private int _selectedNewUserSiteId;
         private string _searchText = "";
@@ -43,18 +42,6 @@ namespace PagesRouges.ViewModel
             {
                 _currentUserList = value;
                 OnPropertyChanged(nameof(CurrentUserList));
-            }
-        }
-        public ObservableCollection<User> UsersList
-        {
-            get
-            {
-                return _usersList;
-            }
-            set
-            {
-                _usersList = value;
-                OnPropertyChanged(nameof(UsersList));
             }
         }
         public int SelectedNewUserServiceId
@@ -198,7 +185,6 @@ namespace PagesRouges.ViewModel
         {
             try
             {
-                MessageBox.Show($"Champ = {SearchText}, Id = {SelectedNewUserServiceId}, Id = {SelectedNewUserSiteId}");
                 var userList = new List<User>();
                 userList = userRepository.GetAllFiltered(SearchText, SelectedNewUserServiceId, SelectedNewUserSiteId).ToList();
                 CurrentUserList = new ObservableCollection<User>(userList);
@@ -217,7 +203,7 @@ namespace PagesRouges.ViewModel
                 }
             } catch (Exception ex)
             {
-                ErrorLogger.LogError(ex, "UuserRepository.GetAllFiltered");
+                ErrorLogger.LogError(ex, "UserRepository.GetAllFiltered");
                 throw;
             }
         }

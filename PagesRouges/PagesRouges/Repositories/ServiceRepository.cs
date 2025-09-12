@@ -101,5 +101,32 @@ namespace PagesRouges.Repositories
             }
             return null;
         }
+        public IEnumerable<Service> GetAllById(int id)
+        {
+            List<Service> servicesList = new List<Service>();
+
+            using (var connection = GetConnection())
+            using (var command = new SqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = "Select * from ServiceTable where IdService = @id";
+                command.Parameters.Add("@id", SqlDbType.Int).Value = id;
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var service = new Service
+                        {
+                            ServiceId = (int)reader["IdService"],
+                            ServiceName = reader["NameService"].ToString()
+                        }; 
+                        servicesList.Add(service);
+                    }
+                }
+            }
+
+            return servicesList;
+        }
     }
 }

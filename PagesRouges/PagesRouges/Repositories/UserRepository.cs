@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.IdentityModel.Tokens;
 using PagesRouges.API;
+using PagesRouges.ErrorManager;
 using PagesRouges.Model;
 using System;
 using System.Collections.Generic;
@@ -16,25 +17,31 @@ namespace PagesRouges.Repositories
     {
         public void Add(User user)
         {
-            using (var connection = GetConnection())
-            using (var command = new SqlCommand())
+            try
             {
-                connection.Open();
-                command.Connection = connection;
-                command.CommandText = @"Insert into [UserTable] " +
-                    "(NameUser, FirstNameUser, FixNumberUser, " +
-                    "PhoneNumberUser, EmailUser, UserIdService, UserIdSite) " +
-                    "values (@name, @firstname, @fix, @phone, " +
-                    "@mail, @idService, @idSite)";
-                command.Parameters.AddWithValue("@name", user.Name);
-                command.Parameters.AddWithValue("@firstname", user.FirstName);
-                command.Parameters.AddWithValue("@fix", user.FixNumber);
-                command.Parameters.AddWithValue("@phone", user.PhoneNumber);
-                command.Parameters.AddWithValue("@mail", user.Email);
-                command.Parameters.AddWithValue("@idService", user.ServiceId);
-                command.Parameters.AddWithValue("@idSite", user.SiteId);
+                using (var connection = GetConnection())
+                using (var command = new SqlCommand())
+                {
+                    connection.Open();
+                    command.Connection = connection;
+                    command.CommandText = @"Insert into [UserTable] " +
+                        "(NameUser, FirstNameUser, FixNumberUser, " +
+                        "PhoneNumberUser, EmailUser, UserIdService, UserIdSite) " +
+                        "values (@name, @firstname, @fix, @phone, " +
+                        "@mail, @idService, @idSite)";
+                    command.Parameters.AddWithValue("@name", user.Name);
+                    command.Parameters.AddWithValue("@firstname", user.FirstName);
+                    command.Parameters.AddWithValue("@fix", user.FixNumber);
+                    command.Parameters.AddWithValue("@phone", user.PhoneNumber);
+                    command.Parameters.AddWithValue("@mail", user.Email);
+                    command.Parameters.AddWithValue("@idService", user.ServiceId);
+                    command.Parameters.AddWithValue("@idSite", user.SiteId);
 
-                command.ExecuteNonQuery();
+                    command.ExecuteNonQuery();
+                }
+            } catch (Exception ex)
+            {
+                ErrorLogger.LogError(ex, "Add (UserRepository)");
             }
         }
 

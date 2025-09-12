@@ -10,8 +10,10 @@ namespace PagesRouges.Model
     {
         void Add(Site site);
         void Remove(int id);
+        void Update(int id, string newName);
         int GetRandomIdSite();
         Site GetById(int id);
         IEnumerable<Site> GetAll();
+        IEnumerable<Site> GetAllById(int id);
     }
 }

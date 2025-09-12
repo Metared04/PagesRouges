@@ -13,5 +13,6 @@ namespace PagesRouges.Model
         int GetRandomIdService();
         Service GetById(int id);
         IEnumerable<Service> GetAll();
+        IEnumerable<Service> GetAllById(int id);
     }
 }

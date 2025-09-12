@@ -80,6 +80,7 @@ namespace PagesRouges.ViewModel
             {
                 IsLoginVisible = Visibility.Collapsed;
                 CurrentChildView = new AdminPanelViewModel();
+                ErrorLogger.LogError("Quelqu'un s'est connecter en admin.", "MainViewModel.ExecuteCheckPasswordCommand");
             }
             else
             {

@@ -17,9 +17,11 @@ namespace PagesRouges.ViewModel
     {
         private ObservableCollection<Site> _currentSiteList;
         private ObservableCollection<Site> _allSites;
+        private int _selectedNewUserSiteId;
         private string _searchSiteText;
 
         private ViewModelBase _createNewSiteView;
+        private ViewModelBase _siteEditorView;
 
         private ISiteRepository siteRepository;
 
@@ -49,6 +51,18 @@ namespace PagesRouges.ViewModel
                 OnPropertyChanged(nameof(AllSites));
             }
         }
+        public int SelectedNewUserSiteId
+        {
+            get
+            {
+                return _selectedNewUserSiteId;
+            }
+            set
+            {
+                _selectedNewUserSiteId = value;
+                OnPropertyChanged(nameof(SelectedNewUserSiteId));
+            }
+        }
         public string SearchSiteText
         {
             get
@@ -73,6 +87,18 @@ namespace PagesRouges.ViewModel
                 OnPropertyChanged(nameof(CreateNewSiteView));
             }
         }
+        public ViewModelBase SiteEditorView
+        {
+            get
+            {
+                return _siteEditorView;
+            }
+            set
+            {
+                _siteEditorView = value;
+                OnPropertyChanged(nameof(SiteEditorView));
+            }
+        }
         public ViewModelBase SiteView
         {
             get
@@ -88,7 +114,10 @@ namespace PagesRouges.ViewModel
         public ICommand AddSiteCommand { get; }
         public ICommand DeleteSiteCommand { get; }
         public ICommand UpdateSiteCommand { get; }
-        public ICommand SearchSiteNameCommand {  get; }
+        public ICommand SearchSiteCommand { get; }
+        public ICommand RefreshSiteListCommand { get; }
+
+        public ObservableCollection<Site> SiteIds { get; set; } = new ObservableCollection<Site>();
         public SitesListViewModel()
         {
             siteRepository = new SiteRepository();
@@ -96,7 +125,8 @@ namespace PagesRouges.ViewModel
             AddSiteCommand = new ViewModelCommand(ExecuteAddSiteCommand);
             DeleteSiteCommand = new ViewModelCommand(ExecuteDeleteSiteCommand);
             UpdateSiteCommand = new ViewModelCommand(ExecuteUpdateSiteCommand);
-            SearchSiteNameCommand = new ViewModelCommand(ExecuteSearchSiteNameCommand);
+            SearchSiteCommand = new ViewModelCommand(ExecuteSearchSiteCommand);
+            RefreshSiteListCommand = new ViewModelCommand(ExecuteRefreshSiteListCommand);
 
             LoadData();
         }
@@ -105,6 +135,16 @@ namespace PagesRouges.ViewModel
             var siteList = new List<Site>();
             siteList = siteRepository.GetAll().ToList();
             CurrentSiteList = new ObservableCollection<Site>(siteList);
+
+            var dbSiteList = new List<Site>();
+            dbSiteList = siteRepository.GetAll().ToList();
+            SiteIds.Clear();
+            foreach (var site in dbSiteList)
+            {
+                SiteIds.Add(site);
+            }
+
+            SelectedNewUserSiteId = 0;
         }
         private void ExecuteAddSiteCommand(object obj)
         {
@@ -139,22 +179,33 @@ namespace PagesRouges.ViewModel
         }
         private void ExecuteUpdateSiteCommand(object obj)
         {
-            
+            var site = obj as Site;
+            SiteEditorView = new EditSiteViewModel(site);
+            var window = new EditSiteView
+            {
+                DataContext = SiteEditorView,
+                Owner = Application.Current.MainWindow
+            };
+            window.ShowDialog();
+            LoadData();
         }
-        private void ExecuteSearchSiteNameCommand(object obj)
+        private void ExecuteSearchSiteCommand(object obj)
+        {            
+            try
+            {
+                var siteList = new List<Site>();
+                siteList = siteRepository.GetAllById(SelectedNewUserSiteId).ToList();
+                CurrentSiteList = new ObservableCollection<Site>(siteList);
+            }
+            catch (Exception ex)
+            {
+                ErrorLogger.LogError(ex, "SiteRepository.GetAllById");
+                throw;
+            }
+        }
+        private void ExecuteRefreshSiteListCommand(object obj)
         {
-            if (string.IsNullOrWhiteSpace(SearchSiteText))
-            {
-                CurrentSiteList = new ObservableCollection<Site>(_allSites);
-            }
-            else
-            {
-                var filtered = _allSites
-                    .Where(s => s.SiteName != null &&
-                                s.SiteName.ToLower().Contains(SearchSiteText.ToLower()))
-                    .ToList();
-                CurrentSiteList = new ObservableCollection<Site>(filtered);
-            }
+            LoadData();
         }
     }
 }

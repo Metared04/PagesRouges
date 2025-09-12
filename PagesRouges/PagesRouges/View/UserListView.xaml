@@ -12,7 +12,9 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0">
+        <StackPanel Orientation="Horizontal"
+                VerticalAlignment="Top"
+                Grid.Row="0">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -20,22 +22,115 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
-                         Width="300"
-                         Height="30"
-                         Grid.Column="0"/>
-                <Button Name="searchNameButton"
+
+                <StackPanel Grid.Column="0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="Nom :"
+                           Grid.Row="0"/>
+                        <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                         Grid.Row="1"
+                         Width="100"
+                         Height="20"
+                         Margin="5,0,5,0"/>
+                    </Grid>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="Site :"
+                           Grid.Row="0"/>
+                        <ComboBox ItemsSource="{Binding SiteIds}" 
+                          SelectedValue="{Binding SelectedNewUserSiteId, Mode=TwoWay}"
+                          SelectedValuePath="SiteId"
+                          DisplayMemberPath="SiteName"
+                          Margin="5,0,5,0"
+                          Width="75"
+                          Height="20"
+                          Grid.Row="1"/>
+                    </Grid>
+                </StackPanel>
+                <StackPanel Grid.Column="2">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="Service :"
+                           Grid.Row="0"/>
+                        <ComboBox ItemsSource="{Binding ServiceIds}" 
+                          SelectedValue="{Binding SelectedNewUserServiceId, Mode=TwoWay}"
+                          SelectedValuePath="ServiceId"
+                          DisplayMemberPath="ServiceName"
+                          Margin="5,0,5,0"
+                          Width="75"
+                          Height="20"
+                          Grid.Row="1"/>
+                    </Grid>
+                </StackPanel>
+                <StackPanel Grid.Column="3">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Button Name="searchUsersButton"
+                        Command="{Binding SearchFilteredUserCommand}"
                         Content="Chercher"
-                        Command="{Binding SearchNameCommand}"
                         Margin="5,0,0,0"
-                        Grid.Column="1"/>
-                <TextBlock Text="Utilisateur"
-                           Grid.Column="2"/>
-                <Button Content="+"
-                        Command="{Binding AddUserCommand}"
-                        Grid.Column="3"
-                        Width="30"/>
+                        Grid.Row="1"/>
+                    </Grid>
+
+                </StackPanel>
+                <StackPanel Grid.Column="4">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Button Name="refreshListButton"
+                        Command="{Binding RefreshUserListCommand}"
+                        Content="Rafraichir"
+                        Margin="5,0,5,0"
+                        Grid.Row="1"/>
+                    </Grid>
+                </StackPanel>
+                <StackPanel Grid.Column="5">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Button Name="createException"
+                        Command="{Binding GetExceptionCommand}"
+                        Content="Erreur"
+                        Margin="5,0,5,0"
+                        Grid.Row="1"/>
+                    </Grid>
+
+                </StackPanel>
+                <StackPanel Grid.Column="6">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Button x:Name="AddUsersButton"
+                                Command="{Binding AddUserCommand}"
+                                Content="Ajouter"
+                                Grid.Row="1"/>
+                    </Grid>
+                </StackPanel>
             </Grid>
         </StackPanel>
 

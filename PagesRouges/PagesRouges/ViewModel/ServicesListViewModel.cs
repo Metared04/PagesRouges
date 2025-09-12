@@ -18,9 +18,13 @@ namespace PagesRouges.ViewModel
     {
         private ObservableCollection<Service> _currentServiceList;
 
+        private int _selectedNewUserServiceId;
+
         private IServiceRepository serviceRepository;
 
         private ViewModelBase _createNewServiceView;
+
+        private List<Service> _servicesList;
 
         public ObservableCollection<Service> CurrentServiceList
         {
@@ -32,6 +36,18 @@ namespace PagesRouges.ViewModel
             {
                 _currentServiceList = value;
                 OnPropertyChanged(nameof(CurrentServiceList));
+            }
+        }
+        public int SelectedNewUserServiceId
+        {
+            get
+            {
+                return _selectedNewUserServiceId;
+            }
+            set
+            {
+                _selectedNewUserServiceId = value;
+                OnPropertyChanged(nameof(SelectedNewUserServiceId));
             }
         }
         public ViewModelBase CreateNewServiceView
@@ -46,9 +62,24 @@ namespace PagesRouges.ViewModel
                 OnPropertyChanged(nameof(CreateNewServiceView));
             }
         }
+        public List<Service> ServicesList
+        {
+            get
+            {
+                return _servicesList;
+            }
+            set
+            {
+                _servicesList = value;
+                OnPropertyChanged(nameof(ServicesList));
+            }
+        }
         public ICommand AddServiceCommand { get; }
         public ICommand DeleteServiceCommand { get; }
         public ICommand UpdateServiceCommand { get; }
+        public ICommand RefreshServiceListCommand { get; }
+        public ICommand SearchServiceCommand { get; }
+        public ObservableCollection<Service> ServiceIds { get; set; } = new ObservableCollection<Service>();
         public ServicesListViewModel()
         {
             serviceRepository = new ServiceRepository();
@@ -56,6 +87,8 @@ namespace PagesRouges.ViewModel
             AddServiceCommand = new ViewModelCommand(ExecuteAddServiceCommand);
             DeleteServiceCommand = new ViewModelCommand(ExecuteDeleteServiceCommand);
             UpdateServiceCommand = new ViewModelCommand(ExecuteUpdateServiceCommand);
+            RefreshServiceListCommand = new ViewModelCommand(ExecuteRefreshServiceListCommand);
+            SearchServiceCommand = new ViewModelCommand(ExecuteSearchServiceCommand);
 
             LoadData();
         }
@@ -64,6 +97,15 @@ namespace PagesRouges.ViewModel
             var serviceList = new List<Service>();
             serviceList = serviceRepository.GetAll().ToList();
             CurrentServiceList = new ObservableCollection<Service>(serviceList);
+
+            var dbServicesList = new List<Service>();
+            dbServicesList = serviceRepository.GetAll().ToList();
+            ServiceIds.Clear();
+            foreach (var service in dbServicesList)
+            {
+                ServiceIds.Add(service);
+            }
+            SelectedNewUserServiceId = 0;
         }
         private void ExecuteAddServiceCommand(object obj)
         {
@@ -99,6 +141,23 @@ namespace PagesRouges.ViewModel
         private void ExecuteUpdateServiceCommand(object obj)
         {
             //throw new NotImplementedException();
+        }
+        private void ExecuteRefreshServiceListCommand(object obj)
+        {
+            LoadData();
+        }
+        private void ExecuteSearchServiceCommand(object obj)
+        {
+            try
+            {
+                var serviceList = new List<Service>();
+                serviceList = serviceRepository.GetAllById(SelectedNewUserServiceId).ToList();
+                CurrentServiceList = new ObservableCollection<Service>(serviceList);
+            } catch (Exception ex)
+            {
+                ErrorLogger.LogError(ex, "serviceRepository.GetAllById");
+                throw;
+            }
         }
     }
 }
