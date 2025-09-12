@@ -1,4 +1,5 @@
-﻿using PagesRouges.Model;
+﻿using PagesRouges.ErrorManager;
+using PagesRouges.Model;
 using PagesRouges.Repositories;
 using PagesRouges.View;
 using System;
@@ -114,6 +115,7 @@ namespace PagesRouges.ViewModel
                 Owner = Application.Current.MainWindow
             };
             window.ShowDialog();
+            LoadData();
         }
         private void ExecuteDeleteSiteCommand(object obj)
         {
@@ -126,10 +128,13 @@ namespace PagesRouges.ViewModel
                 siteRepository.Remove(site.SiteId);
                 CurrentSiteList.Remove(site);
                 MessageBox.Show("Site et utilisateurs supprimé avec succès.", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
+                LoadData();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Erreur lors de la suppression : {ex}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                //MessageBox.Show($"Erreur lors de la suppression : {ex}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                ErrorLogger.LogError(ex, "siteRepository.Remove");
+                throw;
             }
         }
         private void ExecuteUpdateSiteCommand(object obj)

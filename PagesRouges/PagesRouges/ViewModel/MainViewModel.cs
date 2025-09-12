@@ -1,4 +1,5 @@
-﻿using PagesRouges.Model;
+﻿using PagesRouges.ErrorManager;
+using PagesRouges.Model;
 using PagesRouges.View;
 using System;
 using System.Collections.Generic;
@@ -74,7 +75,6 @@ namespace PagesRouges.ViewModel
         {
             var passwordBox = obj as PasswordBox;
             string inputPassword = passwordBox?.Password ?? string.Empty;
-            MessageBox.Show($"Mdp = {inputPassword}");
 
             if (inputPassword == _storedPassword)
             {
@@ -84,6 +84,7 @@ namespace PagesRouges.ViewModel
             else
             {
                 MessageBox.Show("Mot de passe incorrect !");
+                ErrorLogger.LogError("Mot de passe incorrect", "MainViewModel.ExecuteCheckPasswordCommand");
             }
         }
     }

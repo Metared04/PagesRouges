@@ -1,4 +1,5 @@
-﻿using PagesRouges.Model;
+﻿using PagesRouges.ErrorManager;
+using PagesRouges.Model;
 using PagesRouges.Repositories;
 using System;
 using System.Collections.Generic;
@@ -65,7 +66,9 @@ namespace PagesRouges.ViewModel
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Erreur lors de la création du site : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                    //MessageBox.Show($"Erreur lors de la création du site : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                    ErrorLogger.LogError(ex, "serviceRepository.Add");
+                    throw;
                 }
             }
         }

@@ -1,4 +1,7 @@
-﻿using PagesRouges.Model;
+﻿using Azure;
+using PagesRouges.API;
+using PagesRouges.ErrorManager;
+using PagesRouges.Model;
 using PagesRouges.Repositories;
 using PagesRouges.View;
 using System;
@@ -14,11 +17,16 @@ namespace PagesRouges.ViewModel
 {
     public class UserListViewModel : ViewModelBase
     {
-        private ObservableCollection<User> _currentUserList;
+        private readonly RandomUserService _randomUserService;
 
+        private ObservableCollection<User> _currentUserList;
+        private ViewModelBase _createNewUserView;
+        private ViewModelBase _createRandomNewUsersView;
 
         private IUserRepository userRepository;
-
+        private IServiceRepository serviceRepository;
+        private ISiteRepository siteRepository;
+    
         private ViewModelBase _userView;
 
         public ObservableCollection<User> CurrentUserList
@@ -31,6 +39,18 @@ namespace PagesRouges.ViewModel
             {
                 _currentUserList = value;
                 OnPropertyChanged(nameof(CurrentUserList));
+            }
+        }
+        private ViewModelBase CreateNewUserView
+        {
+            get
+            {
+                return _createNewUserView;
+            }
+            set
+            {
+                _createNewUserView = value;
+                OnPropertyChanged(nameof(CreateNewUserView));
             }
         }
         public ViewModelBase UserView
@@ -50,15 +70,21 @@ namespace PagesRouges.ViewModel
         public ICommand DeleteUserCommand { get; }
         public ICommand UpdateUserInfosCommand { get; }
         public ICommand SearchNameCommand { get; }
+        public ICommand AddUserCommand { get; }
 
         public UserListViewModel()
         {
+            _randomUserService = new RandomUserService();
+
             userRepository = new UserRepository();
+            serviceRepository = new ServiceRepository();
+            siteRepository = new SiteRepository();
 
             ShowUserInfosCommand = new ViewModelCommand(ExecuteShowUserInfosCommand);
             DeleteUserCommand = new ViewModelCommand(ExecuteDeleteUserCommand);
             UpdateUserInfosCommand = new ViewModelCommand(ExecuteUpdateUserInfosCommand);
             SearchNameCommand = new ViewModelCommand(ExecuteSearchNameCommand);
+            AddUserCommand = new ViewModelCommand(ExecuteAddUserCommand);
 
             LoadData();
         }
@@ -78,6 +104,7 @@ namespace PagesRouges.ViewModel
                 Owner = Application.Current.MainWindow
             };
             window.ShowDialog();
+            LoadData();
         }
         private void ExecuteDeleteUserCommand(object obj)
         {
@@ -90,10 +117,13 @@ namespace PagesRouges.ViewModel
                 userRepository.Remove(user);
                 CurrentUserList.Remove(user);
                 MessageBox.Show("Utilisateur supprimé avec succès.", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
+                LoadData();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Erreur lors de la suppression : {ex}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                //MessageBox.Show($"Erreur lors de la suppression : {ex}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                ErrorLogger.LogError(ex, "UserRepository.Remove");
+                throw;
             }
         }
         private void ExecuteUpdateUserInfosCommand(object obj)
@@ -104,5 +134,17 @@ namespace PagesRouges.ViewModel
         {
 
         }
+        private void ExecuteAddUserCommand(object obj)
+        {
+            CreateNewUserView = new AddUserViewModel();
+            var window = new AddUserView
+            {
+                DataContext = CreateNewUserView,
+                Owner = Application.Current.MainWindow
+            };
+            window.ShowDialog();
+            LoadData();
+        }
+        
     }
 }

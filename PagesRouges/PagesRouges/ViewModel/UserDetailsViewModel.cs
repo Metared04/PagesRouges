@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using PagesRouges.ErrorManager;
 using PagesRouges.Model;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
@@ -6,6 +7,7 @@ using QuestPDF.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Net.Sockets;
 using System.Numerics;
 using System.Reflection.Metadata;
@@ -119,10 +121,15 @@ namespace PagesRouges.ViewModel
                             .PaddingVertical(1, Unit.Centimetre)
                             .Column(x =>
                             {
-                                x.Item().Text("Pages Rouges").FontSize(20).Bold();
-                                x.Item().Text($"ID: {User?.Id}").FontSize(12);
-                                x.Item().Text($"Nom: {User?.Name}").FontSize(12);
-                                x.Item().Text($"Prenom: {User?.FirstName}").FontSize(12);
+                                x.Item().Text("Pages Rouges - Fiche salarié").FontSize(20).Bold();
+                                x.Item().Text($"ID : {User?.Id}").FontSize(12);
+                                x.Item().Text($"Nom : {User?.Name}").FontSize(12);
+                                x.Item().Text($"Prenom : {User?.FirstName}").FontSize(12);
+                                x.Item().Text($"Mail :{User?.Email}").FontSize(12);
+                                x.Item().Text($"Numero Fix : {User?.FixNumber}").FontSize(12);
+                                x.Item().Text($"Numero Mobile : {User?.PhoneNumber}").FontSize(12);
+                                x.Item().Text($"Service : {User?.Service}").FontSize(12);
+                                x.Item().Text($"Site : {User?.Site}").FontSize(12);
                             });
                     });
                 }).GeneratePdf(saveFileDialog.FileName);
@@ -132,8 +139,9 @@ namespace PagesRouges.ViewModel
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Erreur lors de l'exportation du pdf : {ex.Message}",
-                "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                //MessageBox.Show($"Erreur lors de l'exportation du pdf : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                ErrorLogger.LogError(ex, "ExecuteExportToPdfCommand");
+                throw;
             }
         }
         private void ExecuteCloseCommand(object obj)

@@ -1,4 +1,5 @@
-﻿using PagesRouges.Model;
+﻿using PagesRouges.ErrorManager;
+using PagesRouges.Model;
 using PagesRouges.Repositories;
 using PagesRouges.View;
 using System;
@@ -73,6 +74,7 @@ namespace PagesRouges.ViewModel
                 Owner = Application.Current.MainWindow
             };
             window.ShowDialog();
+            LoadData();
         }
         private void ExecuteDeleteServiceCommand(object obj)
         {
@@ -85,10 +87,13 @@ namespace PagesRouges.ViewModel
                 serviceRepository.Remove(service.ServiceId);
                 CurrentServiceList.Remove(service);
                 MessageBox.Show("Service et utilisateurs supprimé avec succès.", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
+                LoadData();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Erreur lors de la suppression : {ex}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                //MessageBox.Show($"Erreur lors de la suppression : {ex}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                ErrorLogger.LogError(ex, "serviceRepository.Remove");
+                throw;
             }
         }
         private void ExecuteUpdateServiceCommand(object obj)

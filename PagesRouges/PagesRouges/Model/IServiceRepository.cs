@@ -10,6 +10,7 @@ namespace PagesRouges.Model
     {
         void Add(Service service);
         void Remove(int id);
+        int GetRandomIdService();
         Service GetById(int id);
         IEnumerable<Service> GetAll();
     }

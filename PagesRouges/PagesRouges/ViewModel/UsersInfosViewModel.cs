@@ -1,4 +1,5 @@
-﻿using PagesRouges.Model;
+﻿using PagesRouges.ErrorManager;
+using PagesRouges.Model;
 using PagesRouges.Repositories;
 using PagesRouges.View;
 using System;
@@ -10,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Timers;
 
 namespace PagesRouges.ViewModel
 {
@@ -17,6 +19,10 @@ namespace PagesRouges.ViewModel
     {
         // Champs
         private ObservableCollection<User> _currentUserList;
+        private ObservableCollection<User> _usersList;
+        private int _selectedNewUserServiceId;
+        private int _selectedNewUserSiteId;
+        private string _searchText = "";
 
         private IUserRepository userRepository;
         private ISiteRepository siteRepository;
@@ -37,6 +43,54 @@ namespace PagesRouges.ViewModel
             {
                 _currentUserList = value;
                 OnPropertyChanged(nameof(CurrentUserList));
+            }
+        }
+        public ObservableCollection<User> UsersList
+        {
+            get
+            {
+                return _usersList;
+            }
+            set
+            {
+                _usersList = value;
+                OnPropertyChanged(nameof(UsersList));
+            }
+        }
+        public int SelectedNewUserServiceId
+        {
+            get
+            {
+                return _selectedNewUserServiceId;
+            }
+            set
+            {
+                _selectedNewUserServiceId = value;
+                OnPropertyChanged(nameof(SelectedNewUserServiceId));
+            }
+        }
+        public int SelectedNewUserSiteId
+        {
+            get
+            {
+                return _selectedNewUserSiteId;
+            }
+            set
+            {
+                _selectedNewUserSiteId = value;
+                OnPropertyChanged(nameof(SelectedNewUserSiteId));
+            }
+        }
+        public string SearchText
+        {
+            get
+            {
+                return _searchText;
+            }
+            set
+            {
+                _searchText = value;
+                OnPropertyChanged(nameof(SearchText));
             }
         }
         public ViewModelBase UserView
@@ -79,6 +133,12 @@ namespace PagesRouges.ViewModel
         public ICommand ShowUserInfosCommand { get; }
         public ICommand DeleteUserCommand { get; }
         public ICommand UpdateUserCommand { get; }
+        public ICommand SearchFilteredUserCommand { get; }
+        public ICommand RefreshUserListCommand { get; }
+        public ICommand GetExceptionCommand { get; }
+
+        public ObservableCollection<Service> ServiceIds { get; set; } = new ObservableCollection<Service>();
+        public ObservableCollection<Site> SiteIds { get; set; } = new ObservableCollection<Site>();
 
         // Constructeur
         public UsersInfosViewModel()
@@ -89,16 +149,39 @@ namespace PagesRouges.ViewModel
 
             // Initialisation des commandes
             ShowUserInfosCommand = new ViewModelCommand(ExecuteShowUserInfosCommand);
+            SearchFilteredUserCommand = new ViewModelCommand(ExecuteSearchFilteredUserCommand);
+            RefreshUserListCommand = new ViewModelCommand(ExecuteRefreshUserListCommand);
+            GetExceptionCommand = new ViewModelCommand(ExecuteGetExceptionCommand);
 
             LoadData();
-
         }
         private void LoadData()
         {
             var userList = new List<User>();
             userList = userRepository.GetAll().ToList();            
             
-            CurrentUserList = new ObservableCollection<User>(userList);                        
+            CurrentUserList = new ObservableCollection<User>(userList);
+
+            var dbServicesList = new List<Service>();
+            var dbSiteList = new List<Site>();
+
+            dbServicesList = serviceRepository.GetAll().ToList();
+            dbSiteList = siteRepository.GetAll().ToList();
+
+            ServiceIds.Clear();
+            SiteIds.Clear();
+
+            foreach (var service in dbServicesList)
+            {
+                ServiceIds.Add(service);
+            }
+            foreach (var site in dbSiteList)
+            {
+                SiteIds.Add(site);
+            }
+            SelectedNewUserServiceId = 0;
+            SelectedNewUserSiteId = 0;
+            SearchText = "";
         }
         private void ExecuteShowUserInfosCommand(object obj)
         {
@@ -111,5 +194,41 @@ namespace PagesRouges.ViewModel
             };
             window.ShowDialog();
         }
+        private void ExecuteSearchFilteredUserCommand(object obj)
+        {
+            try
+            {
+                MessageBox.Show($"Champ = {SearchText}, Id = {SelectedNewUserServiceId}, Id = {SelectedNewUserSiteId}");
+                var userList = new List<User>();
+                userList = userRepository.GetAllFiltered(SearchText, SelectedNewUserServiceId, SelectedNewUserSiteId).ToList();
+                CurrentUserList = new ObservableCollection<User>(userList);
+                if (!string.IsNullOrWhiteSpace(SearchText))
+                {
+                    var filteredByText = userList.Where(u =>
+                        (!string.IsNullOrEmpty(u.Name) && u.Name.ToLower().Contains(SearchText.ToLower())) ||
+                        (!string.IsNullOrEmpty(u.FirstName) && u.FirstName.ToLower().Contains(SearchText.ToLower()))
+                    ).ToList();
+
+                    CurrentUserList = new ObservableCollection<User>(filteredByText);
+                }
+                else
+                {
+                    CurrentUserList = new ObservableCollection<User>(userList);
+                }
+            } catch (Exception ex)
+            {
+                ErrorLogger.LogError(ex, "UuserRepository.GetAllFiltered");
+                throw;
+            }
+        }
+        private void ExecuteRefreshUserListCommand(object obj)
+        {
+            LoadData();
+        }
+        private void ExecuteGetExceptionCommand(object obj)
+        {
+            MessageBox.Show("Exception generer.");
+            ErrorLogger.LogError("Je genere une exception xD", "UsersInfosViewModel.ExecuteGetExceptionCommand");
+        }        
     }
 }

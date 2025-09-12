@@ -38,6 +38,19 @@ namespace PagesRouges.Repositories
                 int rowsAffected = command.ExecuteNonQuery();
             }
         }
+        public int GetRandomIdSite()
+        {
+            using (var connection = GetConnection())
+            using (var command = new SqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = "select top 1 IdSite " +
+                    "from SiteTable order by NEWID()";
+                object result = command.ExecuteScalar();
+                return (result != null) ? Convert.ToInt32(result) : -1;
+            }
+        }
         public IEnumerable<Site> GetAll()
         {
             List<Site> siteList = new List<Site>();

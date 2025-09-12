@@ -37,6 +37,19 @@ namespace PagesRouges.Repositories
                 int rowsAffected = command.ExecuteNonQuery();
             }
         }
+        public int GetRandomIdService()
+        {
+            using (var connection = GetConnection())
+            using (var command = new SqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = "select top 1 IdService " +
+                    "from ServiceTable order by NEWID()";
+                object result = command.ExecuteScalar();
+                return (result != null) ? Convert.ToInt32(result) : -1;
+            }
+        }
         public IEnumerable<Service> GetAll()
         {
             List<Service> serviceList = new List<Service>();
