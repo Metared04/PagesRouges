@@ -45,7 +45,7 @@ namespace PagesRouges.Repositories
             }
         }
 
-        public void Edit(User user, User newUser)
+        public void Edit(Guid id, User newUser)
         {
             using (var connection = GetConnection())
             using (var command = new SqlCommand())
@@ -53,7 +53,7 @@ namespace PagesRouges.Repositories
                 connection.Open();
                 command.Connection = connection;
                 command.CommandText = "Update [UserTable] set NameUser = @name, " +
-                    "FirstNameUser = @firstName, FixNumberUser = @fix, PhoneNumberUser = @phone " +
+                    "FirstNameUser = @firstName, FixNumberUser = @fix, PhoneNumberUser = @phone, " +
                     "EmailUser = @mail, UserIdService = @idService, UserIdSite = @idSite " +
                     "where IdUser = @id";
                 command.Parameters.Add("@name", SqlDbType.Text).Value = newUser.Name;
@@ -61,9 +61,9 @@ namespace PagesRouges.Repositories
                 command.Parameters.Add("@fix", SqlDbType.Text).Value = newUser.FixNumber;
                 command.Parameters.Add("@phone", SqlDbType.Text).Value = newUser.PhoneNumber;
                 command.Parameters.Add("@mail", SqlDbType.Text).Value = newUser.Email;
-                command.Parameters.Add("@idService", SqlDbType.Int).Value = newUser.Service;
-                command.Parameters.Add("@idSite", SqlDbType.Int).Value = newUser.Site;
-                command.Parameters.Add("@id", SqlDbType.UniqueIdentifier).Value = user.Id;
+                command.Parameters.Add("@idService", SqlDbType.Int).Value = newUser.ServiceId;
+                command.Parameters.Add("@idSite", SqlDbType.Int).Value = newUser.SiteId;
+                command.Parameters.Add("@id", SqlDbType.UniqueIdentifier).Value = id;
                 int rowsAffected = command.ExecuteNonQuery();
             }
         }
@@ -90,6 +90,7 @@ namespace PagesRouges.Repositories
                 command.Connection = connection;
                 command.CommandText = "select u.IdUser, u.NameUser, u.FirstNameUser," +
                     "u.FixNumberUser, u.PhoneNumberUser, u.EmailUser, " +
+                    "u.UserIdService, u.UserIdSite, " +
                     "s.NameService, si.NameSite from [UserTable] u " +
                     "INNER JOIN [ServiceTable] s ON u.UserIdService = s.IdService " +
                     "INNER JOIN [SiteTable] si ON u.UserIdSite = si.IdSite ";
@@ -105,8 +106,10 @@ namespace PagesRouges.Repositories
                             FixNumber = reader["FixNumberUser"].ToString(),
                             PhoneNumber = reader["PhoneNumberUser"].ToString(),
                             Email = reader["EmailUser"].ToString(),
+                            ServiceId = (int)reader["UserIdService"],
                             Service = reader["NameService"].ToString(),
-                            Site = reader["NameSite"].ToString()
+                            Site = reader["NameSite"].ToString(),
+                            SiteId = (int)reader["UserIdSite"],
                         };
                         usersList.Add(user);
                     }

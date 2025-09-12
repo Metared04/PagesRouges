@@ -23,6 +23,7 @@ namespace PagesRouges.ViewModel
         private IServiceRepository serviceRepository;
 
         private ViewModelBase _createNewServiceView;
+        private ViewModelBase _serviceEditorView;
 
         private List<Service> _servicesList;
 
@@ -60,6 +61,18 @@ namespace PagesRouges.ViewModel
             {
                 _createNewServiceView = value;
                 OnPropertyChanged(nameof(CreateNewServiceView));
+            }
+        }
+        public ViewModelBase ServiceEditorView
+        {
+            get
+            {
+                return _serviceEditorView;
+            }
+            set
+            {
+                _serviceEditorView = value;
+                OnPropertyChanged(nameof(ServiceEditorView));
             }
         }
         public List<Service> ServicesList
@@ -140,7 +153,15 @@ namespace PagesRouges.ViewModel
         }
         private void ExecuteUpdateServiceCommand(object obj)
         {
-            //throw new NotImplementedException();
+            var service = obj as Service;
+            ServiceEditorView = new EditServiceViewModel(service);
+            var window = new EditServiceView
+            {
+                DataContext = ServiceEditorView,
+                Owner = Application.Current.MainWindow
+            };
+            window.ShowDialog();
+            LoadData();
         }
         private void ExecuteRefreshServiceListCommand(object obj)
         {

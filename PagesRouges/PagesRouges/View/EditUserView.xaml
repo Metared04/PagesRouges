@@ -1,0 +1,125 @@
+﻿<Window x:Class="PagesRouges.View.EditUserView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PagesRouges.View"
+        mc:Ignorable="d"
+        Title="EditUserView" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="25"/>
+        </Grid.RowDefinitions>
+        
+        <StackPanel Grid.Row="0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="375"/>
+                    <ColumnDefinition Width="375"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Nom :" 
+                           Grid.Column="0"/>
+                <TextBox Text="{Binding PreviousName, Mode=TwoWay}"
+                         Grid.Column="1"/>
+            </Grid>
+        </StackPanel>
+        <StackPanel Grid.Row="1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="375"/>
+                    <ColumnDefinition Width="375"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Prenom :" 
+                           Grid.Column="0"/>
+                <TextBox Text="{Binding PreviousFirstName, Mode=TwoWay}"
+                         Grid.Column="1"/>
+            </Grid>
+        </StackPanel>
+        <StackPanel Grid.Row="2">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="375"/>
+                    <ColumnDefinition Width="375"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Fix :" 
+                           Grid.Column="0"/>
+                <TextBox Text="{Binding PreviousFix, Mode=TwoWay}"
+                         Grid.Column="1"/>
+            </Grid>
+        </StackPanel>
+        <StackPanel Grid.Row="3">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="375"/>
+                    <ColumnDefinition Width="375"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Mobile :" 
+                           Grid.Column="0"/>
+                <TextBox Text="{Binding PreviousPhone, Mode=TwoWay}"
+                         Grid.Column="1"/>
+            </Grid>
+        </StackPanel>
+        <StackPanel Grid.Row="4">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="375"/>
+                    <ColumnDefinition Width="375"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Mail :" 
+                           Grid.Column="0"/>
+                <TextBox Text="{Binding PreviousEmail, Mode=TwoWay}"
+                         Grid.Column="1"/>
+            </Grid>
+        </StackPanel>
+        <StackPanel Grid.Row="5">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="375"/>
+                    <ColumnDefinition Width="375"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Service :" 
+                           Grid.Column="0"/>
+                <ComboBox ItemsSource="{Binding ServiceIds}" 
+                          SelectedValue="{Binding SelectedNewUserServiceId, Mode=TwoWay}"
+                          SelectedValuePath="ServiceId"
+                          DisplayMemberPath="ServiceName"
+                          Margin="5,0,5,0"
+                          Grid.Column="1"/>
+            </Grid>
+        </StackPanel>
+        <StackPanel Grid.Row="6">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="375"/>
+                    <ColumnDefinition Width="375"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Site :" 
+                           Grid.Column="0"/>
+                <ComboBox ItemsSource="{Binding SiteIds}" 
+                          SelectedValue="{Binding SelectedNewUserSiteId, Mode=TwoWay}"
+                          SelectedValuePath="SiteId"
+                          DisplayMemberPath="SiteName"
+                          Margin="5,0,5,0"
+                          Grid.Column="1"/>
+            </Grid>
+        </StackPanel>
+        <StackPanel Grid.Row="7">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="375"/>
+                    <ColumnDefinition Width="375"/>
+                </Grid.ColumnDefinitions>
+                <Button Content="Valider"
+                        Command="{Binding ValidateEditCommand}"
+                        Grid.Column="0"/>
+            </Grid>
+        </StackPanel>
+    </Grid>
+</Window>

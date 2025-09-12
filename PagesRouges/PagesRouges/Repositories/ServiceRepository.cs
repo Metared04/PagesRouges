@@ -37,6 +37,20 @@ namespace PagesRouges.Repositories
                 int rowsAffected = command.ExecuteNonQuery();
             }
         }
+        public void Update(int id, string newName)
+        {
+            using (var connection = GetConnection())
+            using (var command = new SqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = "UPDATE [ServiceTable] SET NameService = @name Where IdService = @id";
+                command.Parameters.Add("@name", SqlDbType.NVarChar).Value = newName;
+                command.Parameters.Add("@id", SqlDbType.Int).Value = id;
+
+                command.ExecuteNonQuery();
+            }
+        }
         public int GetRandomIdService()
         {
             using (var connection = GetConnection())

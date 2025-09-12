@@ -22,7 +22,7 @@ namespace PagesRouges.ViewModel
         private int _selectedNewUserSiteId;
         private string _searchText = "";
         private ViewModelBase _createNewUserView;
-        private ViewModelBase _createRandomNewUsersView;
+        private ViewModelBase _updateUserView;
 
         private IUserRepository userRepository;
         private IServiceRepository serviceRepository;
@@ -81,7 +81,7 @@ namespace PagesRouges.ViewModel
                 OnPropertyChanged(nameof(SearchText));
             }
         }
-        private ViewModelBase CreateNewUserView
+        public ViewModelBase CreateNewUserView
         {
             get
             {
@@ -91,6 +91,18 @@ namespace PagesRouges.ViewModel
             {
                 _createNewUserView = value;
                 OnPropertyChanged(nameof(CreateNewUserView));
+            }
+        }
+        public ViewModelBase UpdateUserView
+        {
+            get
+            {
+                return _updateUserView;
+            }
+            set
+            {
+                _updateUserView = value;
+                OnPropertyChanged(nameof(UpdateUserView));
             }
         }
         public ViewModelBase UserView
@@ -218,7 +230,16 @@ namespace PagesRouges.ViewModel
         }
         private void ExecuteUpdateUserInfosCommand(object obj)
         {
-
+            var user = obj as User;
+            MessageBox.Show($"{user.Name}, {user.FirstName}, {user.FixNumber}, {user.PhoneNumber}, {user.Email}, {user.Service}, {user.Site}, {user.ServiceId}, {user.SiteId}");
+            UpdateUserView = new EditUserViewModel(user);
+            var window = new EditUserView
+            {
+                DataContext = UpdateUserView,
+                Owner = Application.Current.MainWindow
+            };
+            window.ShowDialog();
+            LoadData();
         }
         
         private void ExecuteAddUserCommand(object obj)
