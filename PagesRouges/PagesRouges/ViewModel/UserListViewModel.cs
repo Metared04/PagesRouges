@@ -223,9 +223,8 @@ namespace PagesRouges.ViewModel
             }
             catch (Exception ex)
             {
-                //MessageBox.Show($"Erreur lors de la suppression : {ex}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
                 ErrorLogger.LogError(ex, "UserRepository.Remove");
-                throw;
+                MessageBox.Show($"La suppressio  n'a pas été effectué : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         private void ExecuteUpdateUserInfosCommand(object obj)
@@ -277,7 +276,7 @@ namespace PagesRouges.ViewModel
             catch (Exception ex)
             {
                 ErrorLogger.LogError(ex, "UuserRepository.GetAllFiltered");
-                throw;
+                MessageBox.Show($"La recherche n'a pas été effectué : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         private void ExecuteRefreshUserListCommand(object obj)

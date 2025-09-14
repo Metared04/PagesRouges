@@ -216,9 +216,8 @@ namespace PagesRouges.ViewModel
                 }
                 catch (Exception ex)
                 {
-                    //MessageBox.Show($"Erreur lors l'ajout de l'utilisateur : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
                     ErrorLogger.LogError(ex, "userRepository.Add");
-                    throw;
+                    MessageBox.Show($"L'utilisateur n'a pas été ajouté : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }

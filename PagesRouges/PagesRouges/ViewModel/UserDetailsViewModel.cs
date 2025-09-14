@@ -139,9 +139,8 @@ namespace PagesRouges.ViewModel
             }
             catch (Exception ex)
             {
-                //MessageBox.Show($"Erreur lors de l'exportation du pdf : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
                 ErrorLogger.LogError(ex, "ExecuteExportToPdfCommand");
-                throw;
+                MessageBox.Show($"Le PDF n'a pas été exporté : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         private void ExecuteCloseCommand(object obj)

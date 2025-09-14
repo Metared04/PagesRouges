@@ -66,9 +66,8 @@ namespace PagesRouges.ViewModel
                 }
                 catch (Exception ex)
                 {
-                    //MessageBox.Show($"Erreur lors de la création du site : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
                     ErrorLogger.LogError(ex, "serviceRepository.Add");
-                    throw;
+                    MessageBox.Show($"Le service n'a pas ete ajouté : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }

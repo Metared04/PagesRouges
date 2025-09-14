@@ -6,10 +6,20 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Assets\pagesRougesIcon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\pagesRouges.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\pagesRougesIcon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="CustomControls\" />
+    <Folder Include="DBcontext\" />
     <Folder Include="PDFs\" />
   </ItemGroup>
 
@@ -18,6 +28,12 @@
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="QuestPDF" Version="2025.7.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\pagesRouges.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>

@@ -204,7 +204,7 @@ namespace PagesRouges.ViewModel
             } catch (Exception ex)
             {
                 ErrorLogger.LogError(ex, "UserRepository.GetAllFiltered");
-                throw;
+                MessageBox.Show($"La recherche n'a pas été effectué : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         private void ExecuteRefreshUserListCommand(object obj)

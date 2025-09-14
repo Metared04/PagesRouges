@@ -146,9 +146,8 @@ namespace PagesRouges.ViewModel
             }
             catch (Exception ex)
             {
-                //MessageBox.Show($"Erreur lors de la suppression : {ex}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
                 ErrorLogger.LogError(ex, "serviceRepository.Remove");
-                throw;
+                MessageBox.Show($"Le service n'a pas été supprimé : {ex}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         private void ExecuteUpdateServiceCommand(object obj)
@@ -177,7 +176,7 @@ namespace PagesRouges.ViewModel
             } catch (Exception ex)
             {
                 ErrorLogger.LogError(ex, "serviceRepository.GetAllById");
-                throw;
+                MessageBox.Show($"La recherche n'a pas été effectué : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }
